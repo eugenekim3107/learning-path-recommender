@@ -1,6 +1,6 @@
 document.getElementById('topicForm').addEventListener('submit', function(event) {
     event.preventDefault();
-
+    document.getElementById('startExamButton').disabled = true;
     document.getElementById('loadingIndicator').style.display = 'flex';
 
     const topic = document.getElementById('topicInput').value;
@@ -50,11 +50,16 @@ document.getElementById('topicForm').addEventListener('submit', function(event) 
                                 createTreeButton.disabled = false;
                             }
                         }
-
-                        questionDiv.querySelectorAll('button').forEach(btn => btn.disabled = true);
                         const questionNumber = key.match(/\d+/)[0];
                         const correctAnswer = exam[`answer${questionNumber}`].question_statement;
-
+                        questionDiv.querySelectorAll('button').forEach(btn => {
+                            btn.disabled = true;
+                            // New code to add a green border to the correct answer
+                            if (btn.textContent === correctAnswer) {
+                                btn.style.border = '4px solid green';
+                                btn.style.boxShadow = '0px 0px 10px green';
+                            }
+                        });
                         button.style.backgroundColor = button.textContent === correctAnswer ? 'green' : 'red';
                         const isCorrect = button.textContent === correctAnswer;
                         if (isCorrect) {
@@ -65,7 +70,7 @@ document.getElementById('topicForm').addEventListener('submit', function(event) 
                         }
                         answersBySubtopic[subtopic].push(isCorrect);
                     });
-
+                    
                     questionDiv.appendChild(button);
                 });
 
@@ -77,8 +82,35 @@ document.getElementById('topicForm').addEventListener('submit', function(event) 
         createTreeButton.id = 'createTreeButton'; // Add this line to set the id
         createTreeButton.textContent = 'Create Learning Topic Tree';
         createTreeButton.disabled = true;
+        const please = document.createElement('div');
+        please.id = 'loadingIndicator2';
+        please.style.display = 'none';
+        const container = document.createElement('div');
+        container.appendChild(createTreeButton);
+        container.appendChild(loadingIndicator);
+        const scrollIndicator = document.createElement('div');
+        scrollIndicator.id = 'scrollIndicator';
+        scrollIndicator.style.cssText = `
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            font-size: 16px;
+            cursor: pointer;
+            z-index: 1001;
+            visibility: hidden; /* Hidden by default */
+        `;
+        scrollIndicator.textContent = 'Scroll down to continue';
+        document.body.appendChild(scrollIndicator);scrollIndicator.style.visibility = 'visible';
+
         createTreeButton.addEventListener('click', () => {
             // Use answersBySubtopic here for POST request
+            createTreeButton.disabled = true;
+            please.style.display = 'block';
             const postData = {
                 mainTopic: topic,
                 subtopics: Object.keys(answersBySubtopic).map(subtopic => ({
@@ -256,15 +288,23 @@ document.getElementById('topicForm').addEventListener('submit', function(event) 
                     .text(legendItem.label)
                     .attr('alignment-baseline', 'middle');
                 });
+                please.style.display = 'none';
+                scrollIndicator.style.visibility = 'visible';
             })
             .catch(error => {
                 console.error('Error:', error);
+                please.style.display = 'none';
             });
         });
-
-        examContent.appendChild(createTreeButton);
-
+        container.appendChild(createTreeButton);
+        container.appendChild(please);
+        examContent.appendChild(container);
         document.getElementById('loadingIndicator').style.display = 'none';
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 100) { // You can adjust the offset as needed
+                scrollIndicator.style.visibility = 'hidden';
+            }
+        });
     })
     .catch((error) => {
         console.error('Error:', error);

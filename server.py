@@ -11,7 +11,7 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1:5500"],  # Allows requests from your frontend origin
+    allow_origins=["http://127.0.0.1:5500", "http://127.0.0.1:5501"],  # Allows requests from your frontend origin
     allow_credentials=True,
     allow_methods=["*"],  # Allows all methods
     allow_headers=["*"],  # Allows all headers
@@ -65,7 +65,7 @@ async def create_exam(request: ExamRequest):
                         """
 
     response = client.chat.completions.create(
-        model="gpt-3.5-turbo-1106",
+        model="gpt-3.5-turbo",
         messages=[
             # {"role":"assistant", "content": assistant_content},
             {"role":"user", "content": question_content}
@@ -93,7 +93,7 @@ async def generate_learning_tree(request: responseData):
     """
 
     response = client.chat.completions.create(
-        model="gpt-3.5-turbo-1106",
+        model="gpt-3.5-turbo",
         messages=[
             {"role":"user", "content": question_content}
         ],

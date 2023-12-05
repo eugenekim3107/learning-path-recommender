@@ -81,6 +81,19 @@ input[type="text"] {
     background-color: rgba(255, 255, 255, 0.5); /* Optional: white background with opacity */
 }
 
+#loadingIndicator2 {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    position: fixed; /* Use fixed for overlay or absolute if relative to a parent container */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white background */
+    z-index: 1000; /* Ensure it's on top of other elements */
+}
+
 .loader {
     border: 5px solid #f3f3f3; /* Light grey */
     border-top: 5px solid #3498db; /* Blue */
@@ -131,6 +144,7 @@ input[type="text"] {
     font-weight: bold;
     color: #fff;
     background-color: #4a90e2; /* Change to your preferred color */
+    box-shadow: 0px 0px 20px #4a90e2;
     border: none;
     border-radius: 5px;
     cursor: pointer;
