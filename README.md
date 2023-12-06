@@ -9,3 +9,9 @@ The Personalized Learning Path Recommender is driven by the recognition that eac
 - Click "START EXAM" to generate the exam.
 - Answer all questions, then click "Create Learning Topic Tree".
 - Review your proficiency, areas for development, and topics needing exploration.
+
+## Screenshots of Demo
+
+![Input Page](screenshots/screen1.png)
+![Generated Test Page](screenshots/screen2.png)
+![Topic Tree Page](screenshots/screen3.png)
