@@ -74,7 +74,6 @@ async def create_exam(request: ExamRequest):
     )
 
     gpt_response = response.choices[0].message.content
-    print(gpt_response)
 
     return {"exam": gpt_response}
 
